@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sportify - Sports Companion App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #1a2a6c;
+            --secondary: #b21f1f;
+            --accent: #fdbb2d;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #28a745;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            color: var(--light);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 15px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+        
+        .logo-icon {
+            background: linear-gradient(45deg, var(--accent), var(--secondary));
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-actions button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .user-actions button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .welcome-banner {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .welcome-banner h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .welcome-banner p {
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+        
+        .cta-button {
+            background: linear-gradient(45deg, var(--accent), var(--secondary));
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cta-button i {
+            margin-left: 8px;
+        }
+        
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-large {
+            grid-column: 1 / span 2;
+        }
+        
+        .card h3 {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+        
+        .stat-large {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-small {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, var(--accent), var(--secondary));
+            border-radius: 3px;
+        }
+        
+        .sports-list {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 5px 0 20px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .sports-list::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .sport-item {
+            flex: 0 0 auto;
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .sport-item:hover {
+            transform: translateY(-3px);
+        }
+        
+        .sport-icon {
+            background: rgba(255, 255, 255, 0.1);
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px auto;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .active-sport {
+            background: linear-gradient(45deg, var(--accent), var(--secondary));
+        }
+        
+        .upcoming-events {
+            margin-top: 10px;
+        }
+        
+        .event-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .event-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+        .event-item:last-child {
+            border-bottom: none;
+        }
+        
+        .team-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 15px;
+        }
+        
+        .event-details {
+            flex: 1;
+        }
+        
+        .teams {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .event-time {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 17, 43, 0.95);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px 15px;
+            border-radius: 15px;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+        
+        .nav-item.active {
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-label {
+            font-size: 0.7rem;
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .workout-list {
+            margin-top: 15px;
+        }
+        
+        .workout-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-bottom: 10px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .workout-item:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .workout-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: linear-gradient(45deg, var(--accent), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .workout-info {
+            flex: 1;
+        }
+        
+        .workout-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .workout-details {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .sports-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .sport-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .sport-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .sport-card i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .social-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-bottom: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        
+        .social-info {
+            flex: 1;
+        }
+        
+        .social-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .social-activity {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .stats-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .stats-title {
+            font-weight: 600;
+        }
+        
+        .stats-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                max-width: 400px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Home Page -->
+        <div class="page active" id="home-page">
+            <header>
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <h1>Sportify</h1>
+                </div>
+                <div class="user-actions">
+                    <button id="notifications-btn"><i class="fas fa-bell"></i></button>
+                    <button id="profile-btn"><i class="fas fa-user"></i></button>
+                </div>
+            </header>
+            
+            <div class="welcome-banner">
+                <h2>Good morning, Alex!</h2>
+                <p>Ready for your next workout? You've burned 420 calories today.</p>
+                <button class="cta-button" id="start-activity">Start Activity <i class="fas fa-play"></i></button>
+            </div>
+            
+            <div class="dashboard-cards">
+                <div class="card">
+                    <h3>STEPS</h3>
+                    <div class="stat-small">8,542</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>HEART RATE</h3>
+                    <div class="stat-small">72 bpm</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%"></div>
+                    </div>
+                </div>
+                <div class="card card-large">
+                    <h3>ACTIVE MINUTES</h3>
+                    <div class="stat-large">47 min</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>MY SPORTS</h3>
+            <div class="sports-list">
+                <div class="sport-item" data-sport="running">
+                    <div class="sport-icon active-sport">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <div>Running</div>
+                </div>
+                <div class="sport-item" data-sport="basketball">
+                    <div class="sport-icon">
+                        <i class="fas fa-basketball-ball"></i>
+                    </div>
+                    <div>Basketball</div>
+                </div>
+                <div class="sport-item" data-sport="swimming">
+                    <div class="sport-icon">
+                        <i class="fas fa-swimmer"></i>
+                    </div>
+                    <div>Swimming</div>
+                </div>
+                <div class="sport-item" data-sport="cycling">
+                    <div class="sport-icon">
+                        <i class="fas fa-bicycle"></i>
+                    </div>
+                    <div>Cycling</div>
+                </div>
+                <div class="sport-item" data-sport="gym">
+                    <div class="sport-icon">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <div>Gym</div>
+                </div>
+            </div>
+            
+            <div class="card card-large">
+                <h3>UPCOMING EVENTS</h3>
+                <div class="upcoming-events">
+                    <div class="event-item" data-event="lakers-warriors">
+                        <div class="team-logo">
+                            <i class="fas fa-basketball-ball"></i>
+                        </div>
+                        <div class="event-details">
+                            <div class="teams">Lakers vs Warriors</div>
+                            <div class="event-time">Today • 7:30 PM PST</div>
+                        </div>
+                        <div class="event-action">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                    </div>
+                    <div class="event-item" data-event="patriots-cowboys">
+                        <div class="team-logo">
+                            <i class="fas fa-football-ball"></i>
+                        </div>
+                        <div class="event-details">
+                            <div class="teams">Patriots vs Cowboys</div>
+                            <div class="event-time">Tomorrow • 1:00 PM EST</div>
+                        </div>
+                        <div class="event-action">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                    </div>
+                    <div class="event-item" data-event="bruins-canadiens">
+                        <div class="team-logo">
+                            <i class="fas fa-hockey-puck"></i>
+                        </div>
+                        <div class="event-details">
+                            <div class="teams">Bruins vs Canadiens</div>
+                            <div class="event-time">Sat • 7:00 PM EST</div>
+                        </div>
+                        <div class="event-action">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Workout Page -->
+        <div class="page" id="workout-page">
+            <header>
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <h1>Workouts</h1>
+                </div>
+                <div class="user-actions">
+                    <button id="workout-notifications-btn"><i class="fas fa-bell"></i></button>
+                    <button id="workout-profile-btn"><i class="fas fa-user"></i></button>
+                </div>
+            </header>
+            
+            <div class="welcome-banner">
+                <h2>Your Training Plan</h2>
+                <p>You have 3 workouts scheduled for this week. Keep it up!</p>
+                <button class="cta-button" id="new-workout">New Workout <i class="fas fa-plus"></i></button>
+            </div>
+            
+            <h3>RECOMMENDED WORKOUTS</h3>
+            <div class="workout-list">
+                <div class="workout-item" data-workout="cardio">
+                    <div class="workout-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="workout-info">
+                        <div class="workout-title">Cardio Blast</div>
+                        <div class="workout-details">30 min • 280 calories</div>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                
+                <div class="workout-item" data-workout="strength">
+                    <div class="workout-icon">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <div class="workout-info">
+                        <div class="workout-title">Strength Training</div>
+                        <div class="workout-details">45 min • 320 calories</div>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                
+                <div class="workout-item" data-workout="yoga">
+                    <div class="workout-icon">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <div class="workout-info">
+                        <div class="workout-title">Yoga & Stretching</div>
+                        <div class="workout-details">40 min • 180 calories</div>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                
+                <div class="workout-item" data-workout="hiit">
+                    <div class="workout-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="workout-info">
+                        <div class="workout-title">HIIT Challenge</div>
+                        <div class="workout-details">25 min • 350 calories</div>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sports Page -->
+        <div class="page" id="sports-page">
+            <header>
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h1>Sports</h1>
+                </div>
+                <div class="user-actions">
+                    <button id="sports-notifications-btn"><i class="fas fa-bell"></i></button>
+                    <button id="sports-profile-btn"><i class="fas fa-user"></i></button>
+                </div>
+            </header>
+            
+            <div class="welcome-banner">
+                <h2>Live Games & Scores</h2>
+                <p>Follow your favorite teams and leagues</p>
+                <button class="cta-button" id="view-scores">View Scores <i class="fas fa-arrow-right"></i></button>
+            </div>
+            
+            <h3>POPULAR SPORTS</h3>
+            <div class="sports-grid">
+                <div class="sport-card" data-sport="basketball">
+                    <i class="fas fa-basketball-ball"></i>
+                    <div>Basketball</div>
+                </div>
+                
+                <div class="sport-card" data-sport="soccer">
+                    <i class="fas fa-futbol"></i>
+                    <div>Soccer</div>
+                </div>
+                
+                <div class="sport-card" data-sport="football">
+                    <i class="fas fa-football-ball"></i>
+                    <div>Football</div>
+                </div>
+                
+                <div class="sport-card" data-sport="hockey">
+                    <i class="fas fa-hockey-puck"></i>
+                    <div>Hockey</div>
+                </div>
+                
+                <div class="sport-card" data-sport="tennis">
+                    <i class="fas fa-table-tennis"></i>
+                    <div>Tennis</div>
+                </div>
+                
+                <div class="sport-card" data-sport="baseball">
+                    <i class="fas fa-baseball-ball"></i>
+                    <div>Baseball</div>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 20px;">LIVE SCORES</h3>
+            <div class="card card-large">
+                <div class="event-item">
+                    <div class="team-logo">
+                        <i class="fas fa-basketball-ball"></i>
+                    </div>
+                    <div class="event-details">
+                        <div class="teams">Lakers vs Warriors</div>
+                        <div class="event-time">Q3 • 89-85</div>
+                    </div>
+                    <div class="event-action live">
+                        <span class="live-indicator">LIVE</span>
+                    </div>
+                </div>
+                
+                <div class="event-item">
+                    <div class="team-logo">
+                        <i class="fas fa-futbol"></i>
+                    </div>
+                    <div class="event-details">
+                        <div class="teams">Arsenal vs Chelsea</div>
+                        <div class="event-time">62' • 2-1</div>
+                    </div>
+                    <div class="event-action live">
+                        <span class="live-indicator">LIVE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Social Page -->
+        <div class="page" id="social-page">
+            <header>
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h1>Social</h1>
+                </div>
+                <div class="user-actions">
+                    <button id="social-notifications-btn"><i class="fas fa-bell"></i></button>
+                    <button id="social-profile-btn"><i class="fas fa-user"></i></button>
+                </div>
+            </header>
+            
+            <div class="welcome-banner">
+                <h2>Connect with Friends</h2>
+                <p>See what your friends are doing and challenge them</p>
+                <button class="cta-button" id="add-friends">Add Friends <i class="fas fa-user-plus"></i></button>
+            </div>
+            
+            <h3>FRIEND ACTIVITY</h3>
+            <div class="social-list">
+                <div class="social-item">
+                    <div class="avatar">M</div>
+                    <div class="social-info">
+                        <div class="social-name">Mike Johnson</div>
+                        <div class="social-activity">Just finished a 5K run • 28 min</div>
+                    </div>
+                    <i class="fas fa-heart" style="color: #e52e71;"></i>
+                </div>
+                
+                <div class="social-item">
+                    <div class="avatar">S</div>
+                    <div class="social-info">
+                        <div class="social-name">Sarah Williams</div>
+                        <div class="social-activity">Set a new PR in deadlift • 185 lbs</div>
+                    </div>
+                    <i class="fas fa-heart" style="color: #e52e71;"></i>
+                </div>
+                
+                <div class="social-item">
+                    <div class="avatar">D</div>
+                    <div class="social-info">
+                        <div class="social-name">David Chen</div>
+                        <div class="social-activity">Completed basketball training • 45 min</div>
+                    </div>
+                    <i class="fas fa-heart" style="color: #e52e71;"></i>
+                </div>
+                
+                <div class="social-item">
+                    <div class="avatar">J</div>
+                    <div class="social-info">
+                        <div class="social-name">Jessica Martinez</div>
+                        <div class="social-activity">Just signed up for a marathon</div>
+                    </div>
+                    <i class="fas fa-heart" style="color: #e52e71;"></i>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 20px;">CHALLENGES</h3>
+            <div class="card card-large">
+                <div class="event-item">
+                    <div class="team-logo">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="event-details">
+                        <div class="teams">Weekly Steps Challenge</div>
+                        <div class="event-time">You're in 2nd place • 45K steps</div>
+                    </div>
+                </div>
+                
+                <div class="event-item">
+                    <div class="team-logo">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="event-details">
+                        <div class="teams">Weekend Cycling Challenge</div>
+                        <div class="event-time">Starts in 2 days • 50 km</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats Page -->
+        <div class="page" id="stats-page">
+            <header>
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h1>Statistics</h1>
+                </div>
+                <div class="user-actions">
+                    <button id="stats-notifications-btn"><i class="fas fa-bell"></i></button>
+                    <button id="stats-profile-btn"><i class="fas fa-user"></i></button>
+                </div>
+            </header>
+            
+            <div class="welcome-banner">
+                <h2>Your Progress</h2>
+                <p>Track your performance and improvements over time</p>
+                <button class="cta-button" id="see-insights">See Insights <i class="fas fa-chart-bar"></i></button>
+            </div>
+            
+            <h3>WEEKLY SUMMARY</h3>
+            <div class="stats-card">
+                <div class="stats-header">
+                    <div class="stats-title">Active Minutes</div>
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="stats-value">217 min</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%"></div>
+                </div>
+                <div class="stats-comparison">+15% from last week</div>
+            </div>
+            
+            <div class="stats-card">
+                <div class="stats-header">
+                    <div class="stats-title">Calories Burned</div>
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="stats-value">2,845 cal</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 60%"></div>
+                </div>
+                <div class="stats-comparison">+8% from last week</div>
+            </div>
+            
+            <div class="stats-card">
+                <div class="stats-header">
+                    <div class="stats-title">Distance Covered</div>
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="stats-value">28.5 km</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 85%"></div>
+                </div>
+                <div class="stats-comparison">+22% from last week</div>
+            </div>
+            
+            <h3>GOAL PROGRESS</h3>
+            <div class="card card-large">
+                <div class="event-item">
+                    <div class="team-logo">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <div class="event-details">
+                        <div class="teams">Monthly Running Goal</div>
+                        <div class="event-time">42 of 60 km • 70% complete</div>
+                    </div>
+                </div>
+                
+                <div class="event-item">
+                    <div class="team-logo">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <div class="event-details">
+                        <div class="teams">Strength Training Goal</div>
+                        <div class="event-time">8 of 12 sessions • 67% complete</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bottom-nav">
+        <div class="nav-item active" data-page="home-page">
+            <i class="fas fa-home"></i>
+            <div class="nav-label">Home</div>
+        </div>
+        <div class="nav-item" data-page="workout-page">
+            <i class="fas fa-dumbbell"></i>
+            <div class="nav-label">Workout</div>
+        </div>
+        <div class="nav-item" data-page="sports-page">
+            <i class="fas fa-trophy"></i>
+            <div class="nav-label">Sports</div>
+        </div>
+        <div class="nav-item" data-page="social-page">
+            <i class="fas fa-users"></i>
+            <div class="nav-label">Social</div>
+        </div>
+        <div class="nav-item" data-page="stats-page">
+            <i class="fas fa-chart-line"></i>
+            <div class="nav-label">Stats</div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Update active nav item
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Show the corresponding page
+                const pageId = this.getAttribute('data-page');
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(pageId).classList.add('active');
+            });
+        });
+        
+        // Sport selection functionality
+        document.querySelectorAll('.sport-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.sport-icon').forEach(icon => {
+                    icon.classList.remove('active-sport');
+                });
+                
+                this.querySelector('.sport-icon').classList.add('active-sport');
+                
+                // Show a message about the selected sport
+                const sport = this.getAttribute('data-sport');
+                const sportName = this.querySelector('div').textContent;
+                alert(`You selected ${sportName}. Loading ${sportName} activities...`);
+            });
+        });
+        
+        // Event item functionality
+        document.querySelectorAll('.event-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const event = this.getAttribute('data-event');
+                if (event) {
+                    alert(`Loading details for ${event.replace('-', ' vs ')}`);
+                }
+            });
+        });
+        
+        // Workout item functionality
+        document.querySelectorAll('.workout-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const workout = this.getAttribute('data-workout');
+                alert(`Starting ${workout} workout!`);
+            });
+        });
+        
+        // Sport card functionality
+        document.querySelectorAll('.sport-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const sport = this.getAttribute('data-sport');
+                alert(`Loading ${sport} content...`);
+            });
+        });
+        
+        // Button functionality
+        document.getElementById('start-activity').addEventListener('click', function() {
+            alert('Starting activity tracking...');
+        });
+        
+        document.getElementById('new-workout').addEventListener('click', function() {
+            alert('Creating a new workout...');
+        });
+        
+        document.getElementById('view-scores').addEventListener('click', function() {
+            alert('Loading live scores...');
+        });
+        
+        document.getElementById('add-friends').addEventListener('click', function() {
+            alert('Opening friends list...');
+        });
+        
+        document.getElementById('see-insights').addEventListener('click', function() {
+            alert('Showing your performance insights...');
+        });
+        
+        // Notification buttons
+        document.querySelectorAll('[id$="notifications-btn"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('You have 3 new notifications');
+            });
+        });
+        
+        // Profile buttons
+        document.querySelectorAll('[id$="profile-btn"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('Opening your profile...');
+            });
+        });
+        
+        // Add hover effects to all interactive elements
+        document.querySelectorAll('button, .sport-item, .event-item, .workout-item, .sport-card, .nav-item').forEach(element => {
+            element.addEventListener('mouseover', function() {
+                this.style.transform = this.classList.contains('nav-item') ? 'scale(1.05)' : 'translateY(-2px)';
+            });
+            
+            element.addEventListener('mouseout', function() {
+                this.style.transform = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
